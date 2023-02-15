@@ -14,6 +14,7 @@ export default {
                 }]
             }
         },
+        /**
         SubA: {
             Type: 'AWS::EC2::Subnet',
             Properties: {
@@ -99,6 +100,7 @@ export default {
                 Domain: 'vpc'
             }
         }
+        */
     },
     Mappings: {
         AWSRegion2AZ: {
