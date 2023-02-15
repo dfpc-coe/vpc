@@ -1,0 +1,11 @@
+{
+    "name": "coe-vpc",
+    "profile": "coe",
+    "tags": [
+        {
+            "Key": "Project",
+            "Value": "vpc"
+        },
+        "Owner"
+    ]
+}
