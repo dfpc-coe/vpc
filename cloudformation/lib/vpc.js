@@ -10,12 +10,11 @@ export default {
                 CidrBlock: '172.31.0.0/16',
                 Tags: [{
                     Key: 'Name',
-                    Value: cf.join([cf.stackName, '-vpc'])
+                    Value: cf.join([cf.stackName])
                 }]
             }
         },
-        /**
-        SubA: {
+        SubnetPublic: {
             Type: 'AWS::EC2::Subnet',
             Properties: {
                 AvailabilityZone: cf.findInMap('AWSRegion2AZ', cf.region, '1'),
@@ -24,7 +23,7 @@ export default {
                 MapPublicIpOnLaunch: true
             }
         },
-        SubB: {
+        SubnetPrivate: {
             Type: 'AWS::EC2::Subnet',
             Properties: {
                 AvailabilityZone: cf.findInMap('AWSRegion2AZ', cf.region, '2'),
@@ -71,18 +70,18 @@ export default {
                 GatewayId: cf.ref('InternetGateway')
             }
         },
-        SubAAssoc: {
+        SubnetPublicAssoc: {
             Type: 'AWS::EC2::SubnetRouteTableAssociation',
             Properties: {
                 RouteTableId: cf.ref('RouteTable'),
-                SubnetId: cf.ref('SubA')
+                SubnetId: cf.ref('SubnetPublic')
             }
         },
-        SubBAssoc: {
+        SubnetPrivateAssoc: {
             Type: 'AWS::EC2::SubnetRouteTableAssociation',
             Properties: {
                 RouteTableId: cf.ref('RouteTable'),
-                SubnetId: cf.ref('SubB')
+                SubnetId: cf.ref('SubnetPrivate')
             }
         },
         NatGateway: {
@@ -90,7 +89,7 @@ export default {
             DependsOn: 'NatPublicIP',
             Properties:  {
                 AllocationId: cf.getAtt('NatPublicIP', 'AllocationId'),
-                SubnetId: cf.ref('SubA')
+                SubnetId: cf.ref('SubnetPublic')
             }
         },
         NatPublicIP: {
@@ -100,10 +99,11 @@ export default {
                 Domain: 'vpc'
             }
         }
-        */
     },
     Mappings: {
         AWSRegion2AZ: {
+            'us-gov-east-1': { '1': 'us-gov-east-1a', '2': 'us-gov-east-1b', '3': 'us-gov-east-1c' },
+            'us-gov-west-1': { '1': 'us-gov-west-1a', '2': 'us-gov-west-1b', '3': 'us-gov-west-1c' },
             'us-east-1': { '1': 'us-east-1b', '2': 'us-east-1c', '3': 'us-east-1d', '4': 'us-east-1e' },
             'us-west-1': { '1': 'us-west-1b', '2': 'us-west-1c' },
             'us-west-2': { '1': 'us-west-2a', '2': 'us-west-2b', '3': 'us-west-2c'  }
