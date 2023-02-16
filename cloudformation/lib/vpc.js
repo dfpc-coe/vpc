@@ -20,7 +20,11 @@ export default {
                 AvailabilityZone: cf.findInMap('AWSRegion2AZ', cf.region, '1'),
                 VpcId: cf.ref('VPC'),
                 CidrBlock: '172.31.1.0/24',
-                MapPublicIpOnLaunch: true
+                MapPublicIpOnLaunch: true,
+                Tags: [{
+                    Key: 'Name',
+                    Value: cf.join([cf.stackName, '-subnet-public'])
+                }]
             }
         },
         SubnetPrivate: {
@@ -29,7 +33,11 @@ export default {
                 AvailabilityZone: cf.findInMap('AWSRegion2AZ', cf.region, '2'),
                 VpcId: cf.ref('VPC'),
                 CidrBlock: '172.31.2.0/24',
-                MapPublicIpOnLaunch: true
+                MapPublicIpOnLaunch: true,
+                Tags: [{
+                    Key: 'Name',
+                    Value: cf.join([cf.stackName, '-subnet-private'])
+                }]
             }
         },
         InternetGateway: {
