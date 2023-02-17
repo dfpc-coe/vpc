@@ -7,36 +7,62 @@ export default {
             Properties: {
                 EnableDnsHostnames: true,
                 EnableDnsSupport: true,
-                CidrBlock: '172.31.0.0/16',
+                CidrBlock: '10.0.0.0/16',
                 Tags: [{
                     Key: 'Name',
                     Value: cf.join([cf.stackName])
                 }]
             }
         },
-        SubnetPublic: {
+        SubnetPublicA: {
             Type: 'AWS::EC2::Subnet',
             Properties: {
-                AvailabilityZone: cf.findInMap('AWSRegion2AZ', cf.region, '1'),
+                AvailabilityZone: cf.select(0, cf.getAzs(cf.region)),
                 VpcId: cf.ref('VPC'),
-                CidrBlock: '172.31.1.0/24',
+                CidrBlock: '10.0.1.0/24',
                 MapPublicIpOnLaunch: true,
                 Tags: [{
                     Key: 'Name',
-                    Value: cf.join([cf.stackName, '-subnet-public'])
+                    Value: cf.join([cf.stackName, '-subnet-public-a'])
                 }]
             }
         },
-        SubnetPrivate: {
+        SubnetPublicB: {
             Type: 'AWS::EC2::Subnet',
             Properties: {
-                AvailabilityZone: cf.findInMap('AWSRegion2AZ', cf.region, '2'),
+                AvailabilityZone: cf.select(1, cf.getAzs(cf.region)),
                 VpcId: cf.ref('VPC'),
-                CidrBlock: '172.31.2.0/24',
+                CidrBlock: '10.0.2.0/24',
                 MapPublicIpOnLaunch: true,
                 Tags: [{
                     Key: 'Name',
-                    Value: cf.join([cf.stackName, '-subnet-private'])
+                    Value: cf.join([cf.stackName, '-subnet-public-b'])
+                }]
+            }
+        },
+        SubnetPrivateA: {
+            Type: 'AWS::EC2::Subnet',
+            Properties: {
+                AvailabilityZone: cf.select(0, cf.getAzs(cf.region)),
+                VpcId: cf.ref('VPC'),
+                CidrBlock: '10.0.3.0/24',
+                MapPublicIpOnLaunch: false,
+                Tags: [{
+                    Key: 'Name',
+                    Value: cf.join([cf.stackName, '-subnet-private-a'])
+                }]
+            }
+        },
+        SubnetPrivateB: {
+            Type: 'AWS::EC2::Subnet',
+            Properties: {
+                AvailabilityZone: cf.select(1, cf.getAzs(cf.region)),
+                VpcId: cf.ref('VPC'),
+                CidrBlock: '10.0.4.0/24',
+                MapPublicIpOnLaunch: false,
+                Tags: [{
+                    Key: 'Name',
+                    Value: cf.join([cf.stackName, '-subnet-private-b'])
                 }]
             }
         },
@@ -45,7 +71,7 @@ export default {
             Properties: {
                 Tags: [{
                     Key: 'Name',
-                    Value: cf.join([cf.stackName, '-gateway'])
+                    Value: cf.stackName
                 },{
                     Key: 'Network',
                     Value: 'Public'
@@ -59,7 +85,7 @@ export default {
                 VpcId: cf.ref('VPC')
             }
         },
-        RouteTable: {
+        PublicRouteTable: {
             Type: 'AWS::EC2::RouteTable',
             Properties: {
                 VpcId: cf.ref('VPC'),
@@ -73,23 +99,23 @@ export default {
             Type: 'AWS::EC2::Route',
             DependsOn:  'VPCIG',
             Properties: {
-                RouteTableId: cf.ref('RouteTable'),
+                RouteTableId: cf.ref('PublicRouteTable'),
                 DestinationCidrBlock: '0.0.0.0/0',
                 GatewayId: cf.ref('InternetGateway')
             }
         },
-        SubnetPublicAssoc: {
+        SubnetPublicAAssoc: {
             Type: 'AWS::EC2::SubnetRouteTableAssociation',
             Properties: {
-                RouteTableId: cf.ref('RouteTable'),
-                SubnetId: cf.ref('SubnetPublic')
+                RouteTableId: cf.ref('PublicRouteTable'),
+                SubnetId: cf.ref('SubnetPublicA')
             }
         },
-        SubnetPrivateAssoc: {
+        SubnetPublicBAssoc: {
             Type: 'AWS::EC2::SubnetRouteTableAssociation',
             Properties: {
-                RouteTableId: cf.ref('RouteTable'),
-                SubnetId: cf.ref('SubnetPrivate')
+                RouteTableId: cf.ref('PublicRouteTable'),
+                SubnetId: cf.ref('SubnetPublicB')
             }
         },
         NatGateway: {
@@ -97,7 +123,7 @@ export default {
             DependsOn: 'NatPublicIP',
             Properties:  {
                 AllocationId: cf.getAtt('NatPublicIP', 'AllocationId'),
-                SubnetId: cf.ref('SubnetPublic')
+                SubnetId: cf.ref('SubnetPublicA')
             }
         },
         NatPublicIP: {
@@ -106,15 +132,39 @@ export default {
             Properties: {
                 Domain: 'vpc'
             }
-        }
+        },
+        PrivateRouteTable: {
+            Type: 'AWS::EC2::RouteTable',
+            Properties: {
+                VpcId: cf.ref('VPC'),
+                Tags: [{
+                    Key: 'Network',
+                    Value: 'Private'
+                }]
+            }
+        },
+        PrivateRoute: {
+            Type: 'AWS::EC2::Route',
+            DependsOn:  'VPCIG',
+            Properties: {
+                RouteTableId: cf.ref('PrivateRouteTable'),
+                DestinationCidrBlock: '0.0.0.0/0',
+                NatGatewayId: cf.ref('NatGateway')
+            }
+        },
+        SubnetPrivateAAssoc: {
+            Type: 'AWS::EC2::SubnetRouteTableAssociation',
+            Properties: {
+                RouteTableId: cf.ref('PrivateRouteTable'),
+                SubnetId: cf.ref('SubnetPrivateA')
+            }
+        },
+        SubnetPrivateBAssoc: {
+            Type: 'AWS::EC2::SubnetRouteTableAssociation',
+            Properties: {
+                RouteTableId: cf.ref('PrivateRouteTable'),
+                SubnetId: cf.ref('SubnetPrivateB')
+            }
+        },
     },
-    Mappings: {
-        AWSRegion2AZ: {
-            'us-gov-east-1': { '1': 'us-gov-east-1a', '2': 'us-gov-east-1b', '3': 'us-gov-east-1c' },
-            'us-gov-west-1': { '1': 'us-gov-west-1a', '2': 'us-gov-west-1b', '3': 'us-gov-west-1c' },
-            'us-east-1': { '1': 'us-east-1b', '2': 'us-east-1c', '3': 'us-east-1d', '4': 'us-east-1e' },
-            'us-west-1': { '1': 'us-west-1b', '2': 'us-west-1c' },
-            'us-west-2': { '1': 'us-west-2a', '2': 'us-west-2b', '3': 'us-west-2c'  }
-        }
-    }
 };
