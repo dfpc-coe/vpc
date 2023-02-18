@@ -21,7 +21,7 @@
     },
     "homepage": "https://github.com/tak-ps/ecr#readme",
     "dependencies": {
-        "@mapbox/cloudfriend": "^6.0.0",
+        "@openaddresses/cloudfriend": "^7.0.0",
         "@openaddresses/deploy": "^7.5.0"
     },
     "devDependencies": {

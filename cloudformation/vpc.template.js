@@ -1,4 +1,4 @@
-import cf from '@mapbox/cloudfriend';
+import cf from '@openaddresses/cloudfriend';
 import VPC from './lib/vpc.js';
 
 export default cf.merge({
