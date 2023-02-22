@@ -92,6 +92,9 @@ export default {
                 Tags: [{
                     Key: 'Network',
                     Value: 'Public'
+                },{
+                    Key: 'Name',
+                    Value: cf.join([cf.stackName, '-public'])
                 }]
             }
         },
@@ -140,6 +143,9 @@ export default {
                 Tags: [{
                     Key: 'Network',
                     Value: 'Private'
+                },{
+                    Key: 'Name',
+                    Value: cf.join([cf.stackName, '-private'])
                 }]
             }
         },
