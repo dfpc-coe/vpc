@@ -126,14 +126,22 @@ export default {
             DependsOn: 'NatPublicIP',
             Properties:  {
                 AllocationId: cf.getAtt('NatPublicIP', 'AllocationId'),
-                SubnetId: cf.ref('SubnetPublicA')
+                SubnetId: cf.ref('SubnetPublicA'),
+                Tags: [{
+                    Key: 'Name',
+                    Value: cf.stackName
+                }]
             }
         },
         NatPublicIP: {
             Type: 'AWS::EC2::EIP',
             DependsOn: 'VPC',
             Properties: {
-                Domain: 'vpc'
+                Domain: 'vpc',
+                Tags: [{
+                    Key: 'Name',
+                    Value: cf.stackName
+                }]
             }
         },
         PrivateRouteTable: {
