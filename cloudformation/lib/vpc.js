@@ -181,4 +181,41 @@ export default {
             }
         },
     },
+    Outputs: {
+        VPC: {
+            Description: 'VPC ID',
+            Export: {
+                Name: cf.join([cf.stackName, '-vpc'])
+            },
+            Value: cf.ref('VPC')
+        },
+        SubnetPublicA: {
+            Description: 'Subnet Public A',
+            Export: {
+                Name: cf.join([cf.stackName, '-subnet-public-a'])
+            },
+            Value: cf.ref('SubnetPublicA')
+        },
+        SubnetPublicB: {
+            Description: 'Subnet Public B',
+            Export: {
+                Name: cf.join([cf.stackName, '-subnet-public-b'])
+            },
+            Value: cf.ref('SubnetPublicB')
+        },
+        SubnetPrivateA: {
+            Description: 'Subnet Private A',
+            Export: {
+                Name: cf.join([cf.stackName, '-subnet-private-a'])
+            },
+            Value: cf.ref('SubnetPrivateA')
+        },
+        SubnetPrivateB: {
+            Description: 'Subnet Private B',
+            Export: {
+                Name: cf.join([cf.stackName, '-subnet-private-b'])
+            },
+            Value: cf.ref('SubnetPrivateB')
+        }
+    }
 };
