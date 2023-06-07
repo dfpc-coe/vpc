@@ -12,14 +12,14 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/tak-ps/ecr.git"
+        "url": "git+https://github.com/tak-ps/vpc.git"
     },
     "author": "Nick Ingalls <nick@ingalls.ca>",
     "license": "ISC",
     "bugs": {
-        "url": "https://github.com/tak-ps/ecr/issues"
+        "url": "https://github.com/tak-ps/vpc/issues"
     },
-    "homepage": "https://github.com/tak-ps/ecr#readme",
+    "homepage": "https://github.com/tak-ps/vpc#readme",
     "dependencies": {
         "@openaddresses/cloudfriend": "^7.0.0",
         "@openaddresses/deploy": "^8.0.0"
