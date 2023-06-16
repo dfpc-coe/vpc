@@ -189,6 +189,13 @@ export default {
             },
             Value: cf.ref('VPC')
         },
+        VPCCIDR: {
+            Description: 'VPC CIDR Bucket',
+            Export: {
+                Name: cf.join([cf.stackName, '-vpc-cidr'])
+            },
+            Value: cf.getAtt('VPC', 'CidrBlock')
+        },
         SubnetPublicA: {
             Description: 'Subnet Public A',
             Export: {
