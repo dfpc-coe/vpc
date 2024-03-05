@@ -7,6 +7,7 @@
             "Key": "Project",
             "Value": "vpc"
         },
-        "Owner"
+        "Owner",
+        "Client"
     ]
 }
