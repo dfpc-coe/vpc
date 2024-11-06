@@ -1,5 +1,6 @@
 import cf from '@openaddresses/cloudfriend';
 import VPC from './lib/vpc.js';
+import Connect from './lib/connect.js';
 
 export default cf.merge({
     Description: 'Template for @tak-ps/vpc',
@@ -9,4 +10,4 @@ export default cf.merge({
             Type: 'String'
         }
     }
-}, VPC);
+}, VPC, Connect);

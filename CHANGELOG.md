@@ -12,6 +12,10 @@
 
 ### Pending Release
 
+### v1.2.0
+
+- :tada: Add EC2 Instance Connect Endpoint
+
 ### v1.1.0
 
 - :rocket: Add Release Action
