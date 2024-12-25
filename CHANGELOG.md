@@ -12,6 +12,10 @@
 
 ### Pending Release
 
+### v1.3.0
+
+- :rocket: Update deps & ESLint Config
+
 ### v1.2.0
 
 - :tada: Add EC2 Instance Connect Endpoint
