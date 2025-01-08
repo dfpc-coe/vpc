@@ -29,6 +29,20 @@ export default {
                 VpcId: cf.ref('VPC')
             }
         },
+        VPCCIDRPrivateA: {
+            Type: 'AWS::EC2::VPCCidrBlock',
+            Properties: {
+                AmazonProvidedIpv6CidrBlock: true,
+                VpcId: cf.ref('VPC')
+            }
+        },
+        VPCCIDRPrivateB: {
+            Type: 'AWS::EC2::VPCCidrBlock',
+            Properties: {
+                AmazonProvidedIpv6CidrBlock: true,
+                VpcId: cf.ref('VPC')
+            }
+        },
         SubnetPublicA: {
             Type: 'AWS::EC2::Subnet',
             DependsOn: 'VPCCIDRA',
@@ -67,6 +81,8 @@ export default {
                 AvailabilityZone: cf.select(0, cf.getAzs(cf.region)),
                 VpcId: cf.ref('VPC'),
                 CidrBlock: '10.0.3.0/24',
+                Ipv6CidrBlock: cf.select(2, cf.getAtt('VPC', 'Ipv6CidrBlocks')),
+                AssignIpv6AddressOnCreation: true,
                 MapPublicIpOnLaunch: false,
                 Tags: [{
                     Key: 'Name',
@@ -80,6 +96,8 @@ export default {
                 AvailabilityZone: cf.select(1, cf.getAzs(cf.region)),
                 VpcId: cf.ref('VPC'),
                 CidrBlock: '10.0.4.0/24',
+                Ipv6CidrBlock: cf.select(3, cf.getAtt('VPC', 'Ipv6CidrBlocks')),
+                AssignIpv6AddressOnCreation: true,
                 MapPublicIpOnLaunch: false,
                 Tags: [{
                     Key: 'Name',
@@ -209,6 +227,15 @@ export default {
                 RouteTableId: cf.ref('PrivateRouteTable'),
                 DestinationCidrBlock: '0.0.0.0/0',
                 NatGatewayId: cf.ref('NatGateway')
+            }
+        },
+        PrivateRouteV6: {
+            Type: 'AWS::EC2::Route',
+            DependsOn:  'EgressOnlyInternetGateway',
+            Properties: {
+                RouteTableId: cf.ref('PrivateRouteTable'),
+                DestinationIpv6CidrBlock: '::/0',
+                GatewayId: cf.ref('EgressOnlyInternetGateway')
             }
         },
         SubnetPrivateAAssoc: {
