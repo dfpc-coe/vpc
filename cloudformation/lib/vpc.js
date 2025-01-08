@@ -8,18 +8,36 @@ export default {
                 EnableDnsHostnames: true,
                 EnableDnsSupport: true,
                 CidrBlock: '10.0.0.0/16',
+
                 Tags: [{
                     Key: 'Name',
                     Value: cf.join([cf.stackName])
                 }]
             }
         },
+        VPCCIDRA: {
+            Type: 'AWS::EC2::VPCCidrBlock',
+            Properties: {
+                AmazonProvidedIpv6CidrBlock: true,
+                VpcId: cf.ref('VPC')
+            }
+        },
+        VPCCIDRB: {
+            Type: 'AWS::EC2::VPCCidrBlock',
+            Properties: {
+                AmazonProvidedIpv6CidrBlock: true,
+                VpcId: cf.ref('VPC')
+            }
+        },
         SubnetPublicA: {
             Type: 'AWS::EC2::Subnet',
+            DependsOn: 'VPCCIDRA',
             Properties: {
                 AvailabilityZone: cf.select(0, cf.getAzs(cf.region)),
                 VpcId: cf.ref('VPC'),
                 CidrBlock: '10.0.1.0/24',
+                Ipv6CidrBlock: cf.select(0, cf.getAtt('VPC', 'Ipv6CidrBlocks')),
+                AssignIpv6AddressOnCreation: true,
                 MapPublicIpOnLaunch: true,
                 Tags: [{
                     Key: 'Name',
@@ -29,10 +47,13 @@ export default {
         },
         SubnetPublicB: {
             Type: 'AWS::EC2::Subnet',
+            DependsOn: 'VPCCIDRB',
             Properties: {
                 AvailabilityZone: cf.select(1, cf.getAzs(cf.region)),
                 VpcId: cf.ref('VPC'),
                 CidrBlock: '10.0.2.0/24',
+                Ipv6CidrBlock: cf.select(1, cf.getAtt('VPC', 'Ipv6CidrBlocks')),
+                AssignIpv6AddressOnCreation: true,
                 MapPublicIpOnLaunch: true,
                 Tags: [{
                     Key: 'Name',
@@ -76,6 +97,12 @@ export default {
                     Key: 'Network',
                     Value: 'Public'
                 }]
+            }
+        },
+        EgressOnlyInternetGateway: {
+            Type: 'AWS::EC2::EgressOnlyInternetGateway',
+            Properties: {
+                VpcId: cf.ref('VPC')
             }
         },
         VPCIG: {
@@ -179,7 +206,7 @@ export default {
                 RouteTableId: cf.ref('PrivateRouteTable'),
                 SubnetId: cf.ref('SubnetPrivateB')
             }
-        },
+        }
     },
     Outputs: {
         VPC: {

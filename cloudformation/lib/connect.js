@@ -5,8 +5,8 @@ export default {
         InstanceConnectSubnetPublicA: {
             Type: 'AWS::EC2::InstanceConnectEndpoint',
             Properties: {
-                SecurityGroupIds: [ cf.ref('InstanceConnectSG') ],
-                SubnetId: cf.ref('SubnetPublicA'),
+                SecurityGroupIds: [cf.ref('InstanceConnectSG')],
+                SubnetId: cf.ref('SubnetPublicA')
             }
         },
         InstanceConnectSG: {
