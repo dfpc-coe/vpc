@@ -87,6 +87,15 @@ export default {
                 }]
             }
         },
+        S3Endpoint: {
+            Type: 'AWS::EC2::VPCEndpoint',
+            Properties: {
+                VpcEndpointType: 'Gateway',
+                RouteTableIds: [ cf.ref('PublicRouteTable') ],
+                ServiceName: cf.join(['com.amazonaws.', cf.region, '.s3']),
+                VpcId: cf.ref('VPC'),
+            }
+        },
         InternetGateway: {
             Type: 'AWS::EC2::InternetGateway',
             Properties: {
@@ -132,6 +141,15 @@ export default {
                 RouteTableId: cf.ref('PublicRouteTable'),
                 DestinationCidrBlock: '0.0.0.0/0',
                 GatewayId: cf.ref('InternetGateway')
+            }
+        },
+        PublicRouteV6: {
+            Type: 'AWS::EC2::Route',
+            DependsOn:  'EgressOnlyInternetGateway',
+            Properties: {
+                RouteTableId: cf.ref('PublicRouteTable'),
+                DestinationIpv6CidrBlock: '::/0',
+                GatewayId: cf.ref('EgressOnlyInternetGateway')
             }
         },
         SubnetPublicAAssoc: {
@@ -217,7 +235,7 @@ export default {
             Value: cf.ref('VPC')
         },
         VPCCIDR: {
-            Description: 'VPC CIDR Bucket',
+            Description: 'VPC CIDR Block',
             Export: {
                 Name: cf.join([cf.stackName, '-vpc-cidr'])
             },
