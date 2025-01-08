@@ -12,6 +12,8 @@
 
 ### Pending Release
 
+### v1.4.0
+
 - :tada: Add preliminary IPv6 support for VPC - note to deploy the Subnet A/B value of `AssignIpv6AddressOnCreation` must be commented out, deployed and then deployed again with the comment removed
 
 ### v1.3.0
