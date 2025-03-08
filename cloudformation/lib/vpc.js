@@ -184,19 +184,31 @@ export default {
                 SubnetId: cf.ref('SubnetPublicB')
             }
         },
-        NatGateway: {
+        NatGatewayA: {
             Type: 'AWS::EC2::NatGateway',
-            DependsOn: 'NatPublicIP',
+            DependsOn: 'NatPublicIPA',
             Properties:  {
-                AllocationId: cf.getAtt('NatPublicIP', 'AllocationId'),
+                AllocationId: cf.getAtt('NatPublicIPA', 'AllocationId'),
                 SubnetId: cf.ref('SubnetPublicA'),
                 Tags: [{
                     Key: 'Name',
-                    Value: cf.stackName
+                    Value: cf.join([cf.stackName, '-subnet-a'])
                 }]
             }
         },
-        NatPublicIP: {
+        NatGatewayB: {
+            Type: 'AWS::EC2::NatGateway',
+            DependsOn: 'NatPublicIPB',
+            Properties:  {
+                AllocationId: cf.getAtt('NatPublicIPB', 'AllocationId'),
+                SubnetId: cf.ref('SubnetPublicB'),
+                Tags: [{
+                    Key: 'Name',
+                    Value: cf.join([cf.stackName, '-subnet-b'])
+                }]
+            }
+        },
+        NatPublicIPA: {
             Type: 'AWS::EC2::EIP',
             DependsOn: 'VPC',
             Properties: {
@@ -207,7 +219,18 @@ export default {
                 }]
             }
         },
-        PrivateRouteTable: {
+        NatPublicIPB: {
+            Type: 'AWS::EC2::EIP',
+            DependsOn: 'VPC',
+            Properties: {
+                Domain: 'vpc',
+                Tags: [{
+                    Key: 'Name',
+                    Value: cf.stackName
+                }]
+            }
+        },
+        PrivateRouteTableA: {
             Type: 'AWS::EC2::RouteTable',
             Properties: {
                 VpcId: cf.ref('VPC'),
@@ -216,24 +239,55 @@ export default {
                     Value: 'Private'
                 },{
                     Key: 'Name',
-                    Value: cf.join([cf.stackName, '-private'])
+                    Value: cf.join([cf.stackName, '-private-subnet-a'])
                 }]
             }
         },
-        PrivateRoute: {
+        PrivateRouteTableB: {
+            Type: 'AWS::EC2::RouteTable',
+            Properties: {
+                VpcId: cf.ref('VPC'),
+                Tags: [{
+                    Key: 'Network',
+                    Value: 'Private'
+                },{
+                    Key: 'Name',
+                    Value: cf.join([cf.stackName, '-private-subnet-b'])
+                }]
+            }
+        },
+        PrivateRouteA: {
             Type: 'AWS::EC2::Route',
             DependsOn:  'VPCIG',
             Properties: {
-                RouteTableId: cf.ref('PrivateRouteTable'),
+                RouteTableId: cf.ref('PrivateRouteTableA'),
                 DestinationCidrBlock: '0.0.0.0/0',
-                NatGatewayId: cf.ref('NatGateway')
+                NatGatewayId: cf.ref('NatGatewayA')
             }
         },
-        PrivateRouteV6: {
+        PrivateRouteB: {
+            Type: 'AWS::EC2::Route',
+            DependsOn:  'VPCIG',
+            Properties: {
+                RouteTableId: cf.ref('PrivateRouteTableB'),
+                DestinationCidrBlock: '0.0.0.0/0',
+                NatGatewayId: cf.ref('NatGatewayB')
+            }
+        },
+        PrivateRouteV6A: {
             Type: 'AWS::EC2::Route',
             DependsOn:  'EgressOnlyInternetGateway',
             Properties: {
-                RouteTableId: cf.ref('PrivateRouteTable'),
+                RouteTableId: cf.ref('PrivateRouteTableA'),
+                DestinationIpv6CidrBlock: '::/0',
+                GatewayId: cf.ref('EgressOnlyInternetGateway')
+            }
+        },
+        PrivateRouteV6B: {
+            Type: 'AWS::EC2::Route',
+            DependsOn:  'EgressOnlyInternetGateway',
+            Properties: {
+                RouteTableId: cf.ref('PrivateRouteTableB'),
                 DestinationIpv6CidrBlock: '::/0',
                 GatewayId: cf.ref('EgressOnlyInternetGateway')
             }
@@ -241,14 +295,14 @@ export default {
         SubnetPrivateAAssoc: {
             Type: 'AWS::EC2::SubnetRouteTableAssociation',
             Properties: {
-                RouteTableId: cf.ref('PrivateRouteTable'),
+                RouteTableId: cf.ref('PrivateRouteTableA'),
                 SubnetId: cf.ref('SubnetPrivateA')
             }
         },
         SubnetPrivateBAssoc: {
             Type: 'AWS::EC2::SubnetRouteTableAssociation',
             Properties: {
-                RouteTableId: cf.ref('PrivateRouteTable'),
+                RouteTableId: cf.ref('PrivateRouteTableB'),
                 SubnetId: cf.ref('SubnetPrivateB')
             }
         }
