@@ -12,6 +12,10 @@
 
 ### Pending Release
 
+### v1.6.0
+
+- :rocket: Expose a NGW per AG to improve resiliency in case of an AG outage
+
 ### v1.5.0
 
 - :tada: Add preliminary IPv6 support for VPC (Private Subnets) - note to deploy the Subnet A/B value of `AssignIpv6AddressOnCreation` must be commented out, deployed and then deployed again with the comment removed
