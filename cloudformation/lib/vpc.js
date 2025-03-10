@@ -15,42 +15,21 @@ export default {
                 }]
             }
         },
-        VPCCIDRA: {
+        VPCCIDR: {
             Type: 'AWS::EC2::VPCCidrBlock',
             Properties: {
                 AmazonProvidedIpv6CidrBlock: true,
                 VpcId: cf.ref('VPC')
-            }
-        },
-        VPCCIDRB: {
-            Type: 'AWS::EC2::VPCCidrBlock',
-            Properties: {
-                AmazonProvidedIpv6CidrBlock: true,
-                VpcId: cf.ref('VPC')
-            }
-        },
-        VPCCIDRPrivateA: {
-            Type: 'AWS::EC2::VPCCidrBlock',
-            Properties: {
-                AmazonProvidedIpv6CidrBlock: true,
-                VpcId: cf.ref('VPC')
-            }
-        },
-        VPCCIDRPrivateB: {
-            Type: 'AWS::EC2::VPCCidrBlock',
-            Properties: {
-                AmazonProvidedIpv6CidrBlock: true,
-                VpcId: cf.ref('VPC')
-            }
+            }   
         },
         SubnetPublicA: {
             Type: 'AWS::EC2::Subnet',
-            DependsOn: 'VPCCIDRA',
+            DependsOn: 'VPCCIDR',
             Properties: {
                 AvailabilityZone: cf.select(0, cf.getAzs(cf.region)),
                 VpcId: cf.ref('VPC'),
-                CidrBlock: '10.0.1.0/24',
-                Ipv6CidrBlock: cf.select(0, cf.getAtt('VPC', 'Ipv6CidrBlocks')),
+                CidrBlock: cf.select(0, cf.cidr(cf.getAtt('VPC', 'CidrBlock'),256,8)),                            // Select the first out of 256 possible /24 IPv4 subnets from the VPC /16 IPv4 CIDR
+                Ipv6CidrBlock: cf.select(0, cf.cidr(cf.select(0, cf.getAtt('VPC', 'Ipv6CidrBlocks')),256,64)),    // Select the first out of 256 possible /64 IPv6 subnets from the VPC /56 IPv6 CIDR
                 AssignIpv6AddressOnCreation: true,
                 MapPublicIpOnLaunch: true,
                 Tags: [{
@@ -58,30 +37,30 @@ export default {
                     Value: cf.join([cf.stackName, '-subnet-public-a'])
                 }]
             }
-        },
+        },  
         SubnetPublicB: {
             Type: 'AWS::EC2::Subnet',
-            DependsOn: 'VPCCIDRB',
+            DependsOn: 'VPCCIDR',
             Properties: {
                 AvailabilityZone: cf.select(1, cf.getAzs(cf.region)),
                 VpcId: cf.ref('VPC'),
-                CidrBlock: '10.0.2.0/24',
-                Ipv6CidrBlock: cf.select(1, cf.getAtt('VPC', 'Ipv6CidrBlocks')),
+                CidrBlock: cf.select(1, cf.cidr(cf.getAtt('VPC', 'CidrBlock'),256,8)),                            // Select the second out of 256 possible /24 IPv4 subnets from the VPC /16 IPv4 CIDR
+                Ipv6CidrBlock: cf.select(1, cf.cidr(cf.select(0, cf.getAtt('VPC', 'Ipv6CidrBlocks')),256,64)),    // Select the second out of 256 possible /64 IPv6 subnets from the VPC /56 IPv6 CIDR
                 AssignIpv6AddressOnCreation: true,
                 MapPublicIpOnLaunch: true,
                 Tags: [{
                     Key: 'Name',
                     Value: cf.join([cf.stackName, '-subnet-public-b'])
                 }]
-            }
-        },
+            }       
+        },          
         SubnetPrivateA: {
             Type: 'AWS::EC2::Subnet',
             Properties: {
                 AvailabilityZone: cf.select(0, cf.getAzs(cf.region)),
                 VpcId: cf.ref('VPC'),
-                CidrBlock: '10.0.3.0/24',
-                Ipv6CidrBlock: cf.select(2, cf.getAtt('VPC', 'Ipv6CidrBlocks')),
+                CidrBlock: cf.select(2, cf.cidr(cf.getAtt('VPC', 'CidrBlock'),256,8)),                            // Select the third out of 256 possible /24 IPv4 subnets from the VPC /16 IPv4 CIDR
+                Ipv6CidrBlock: cf.select(2, cf.cidr(cf.select(0, cf.getAtt('VPC', 'Ipv6CidrBlocks')),256,64)),    // Select the third out of 256 possible /64 IPv6 subnets from the VPC /56 IPv6 CIDR
                 AssignIpv6AddressOnCreation: true,
                 MapPublicIpOnLaunch: false,
                 Tags: [{
@@ -95,8 +74,9 @@ export default {
             Properties: {
                 AvailabilityZone: cf.select(1, cf.getAzs(cf.region)),
                 VpcId: cf.ref('VPC'),
-                CidrBlock: '10.0.4.0/24',
-                Ipv6CidrBlock: cf.select(3, cf.getAtt('VPC', 'Ipv6CidrBlocks')),
+                //CidrBlock: '10.0.4.0/24',
+                CidrBlock: cf.select(3, cf.cidr(cf.getAtt('VPC', 'CidrBlock'),256,8)),                            // Select the third out of 256 possible /24 IPv4 subnets from the VPC /16 IPv4 CIDR
+                Ipv6CidrBlock: cf.select(3, cf.cidr(cf.select(0, cf.getAtt('VPC', 'Ipv6CidrBlocks')),256,64)),    // Select the third out of 256 possible /64 IPv6 subnets from the VPC /56 IPv6 CIDR
                 AssignIpv6AddressOnCreation: true,
                 MapPublicIpOnLaunch: false,
                 Tags: [{
@@ -163,11 +143,11 @@ export default {
         },
         PublicRouteV6: {
             Type: 'AWS::EC2::Route',
-            DependsOn:  'EgressOnlyInternetGateway',
+            DependsOn:  'VPCIG',
             Properties: {
                 RouteTableId: cf.ref('PublicRouteTable'),
                 DestinationIpv6CidrBlock: '::/0',
-                GatewayId: cf.ref('EgressOnlyInternetGateway')
+                GatewayId: cf.ref('InternetGateway')
             }
         },
         SubnetPublicAAssoc: {
