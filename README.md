@@ -63,7 +63,7 @@ Image Source: [dfpc-coe-vpc.drawio](../../raw/main/documentation/images/dpfc-coe
 
 ## Estimated Cost
 
-The estimated AWS cost for this stack without data transfer or data processing based usage is:
+The estimated AWS cost for this part stack without data transfer or data processing based usage is:
 * Monthly cost: 73.00 USD
 * Yearly cost: 876.00 USD
 
