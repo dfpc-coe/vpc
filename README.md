@@ -60,3 +60,11 @@ The CloudFormation template creates the below depicted AWS resources.
 
 <img src="../../raw/main/documentation/images/dpfc-coe-vpc.png">
 Image Source: [dfpc-coe-vpc.drawio](../../raw/main/documentation/images/dpfc-coe-vpc.drawio)
+
+## Estimated Cost
+
+The estimated AWS cost for this stack without data transfer or data processing based usage is:
+* Monthly cost: 73.00 USD
+* Yearly cost: 876.00 USD
+
+Refer to this [AWS Pricing Calculator estimate](https://calculator.aws/#/estimate?id=0c1627738c15618c39af432977318f3ea5947b2d) for more details.
