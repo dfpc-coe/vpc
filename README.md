@@ -61,6 +61,9 @@ The CloudFormation template creates the below depicted AWS resources.
 <img src="../../raw/main/documentation/images/dfpc-coe-vpc.png">
 Image Source: <a href="../../raw/main/documentation/images/dfpc-coe-vpc.drawio">dfpc-coe-vpc.drawio</a>
 
+> [!NOTE] 
+> AWS only supports [one EC2 Instance Connect Endpoint per VPC and per subnet](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/connect-with-ec2-instance-connect-endpoint.html#ec2-instance-connect-endpoint-prerequisites).
+
 ## Estimated Cost
 
 The estimated AWS cost for this part stack without data transfer or data processing based usage is:
