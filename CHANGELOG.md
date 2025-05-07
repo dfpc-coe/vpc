@@ -12,6 +12,15 @@
 
 ### Pending Release
 
+### v2.0.0
+
+- :tada: Move to fully IPv6 support VPC
+
+Notes:
+- Change all ELBs from Dualstack to IPv4
+- Scale all ECS Services to 0
+- All ENIs with IPv6 Addresses have to be removed
+
 ### v1.6.0
 
 - :rocket: Expose a NGW per AG to improve resiliency in case of an AG outage

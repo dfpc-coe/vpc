@@ -15,43 +15,12 @@ export default {
                 }]
             }
         },
-        VPCCIDRA: {
-            Type: 'AWS::EC2::VPCCidrBlock',
-            Properties: {
-                AmazonProvidedIpv6CidrBlock: true,
-                VpcId: cf.ref('VPC')
-            }
-        },
-        VPCCIDRB: {
-            Type: 'AWS::EC2::VPCCidrBlock',
-            Properties: {
-                AmazonProvidedIpv6CidrBlock: true,
-                VpcId: cf.ref('VPC')
-            }
-        },
-        VPCCIDRPrivateA: {
-            Type: 'AWS::EC2::VPCCidrBlock',
-            Properties: {
-                AmazonProvidedIpv6CidrBlock: true,
-                VpcId: cf.ref('VPC')
-            }
-        },
-        VPCCIDRPrivateB: {
-            Type: 'AWS::EC2::VPCCidrBlock',
-            Properties: {
-                AmazonProvidedIpv6CidrBlock: true,
-                VpcId: cf.ref('VPC')
-            }
-        },
         SubnetPublicA: {
             Type: 'AWS::EC2::Subnet',
-            DependsOn: 'VPCCIDRA',
             Properties: {
                 AvailabilityZone: cf.select(0, cf.getAzs(cf.region)),
                 VpcId: cf.ref('VPC'),
                 CidrBlock: '10.0.1.0/24',
-                Ipv6CidrBlock: cf.select(0, cf.getAtt('VPC', 'Ipv6CidrBlocks')),
-                AssignIpv6AddressOnCreation: true,
                 MapPublicIpOnLaunch: true,
                 Tags: [{
                     Key: 'Name',
@@ -61,13 +30,10 @@ export default {
         },
         SubnetPublicB: {
             Type: 'AWS::EC2::Subnet',
-            DependsOn: 'VPCCIDRB',
             Properties: {
                 AvailabilityZone: cf.select(1, cf.getAzs(cf.region)),
                 VpcId: cf.ref('VPC'),
                 CidrBlock: '10.0.2.0/24',
-                Ipv6CidrBlock: cf.select(1, cf.getAtt('VPC', 'Ipv6CidrBlocks')),
-                AssignIpv6AddressOnCreation: true,
                 MapPublicIpOnLaunch: true,
                 Tags: [{
                     Key: 'Name',
@@ -81,8 +47,6 @@ export default {
                 AvailabilityZone: cf.select(0, cf.getAzs(cf.region)),
                 VpcId: cf.ref('VPC'),
                 CidrBlock: '10.0.3.0/24',
-                Ipv6CidrBlock: cf.select(2, cf.getAtt('VPC', 'Ipv6CidrBlocks')),
-                AssignIpv6AddressOnCreation: true,
                 MapPublicIpOnLaunch: false,
                 Tags: [{
                     Key: 'Name',
@@ -96,8 +60,6 @@ export default {
                 AvailabilityZone: cf.select(1, cf.getAzs(cf.region)),
                 VpcId: cf.ref('VPC'),
                 CidrBlock: '10.0.4.0/24',
-                Ipv6CidrBlock: cf.select(3, cf.getAtt('VPC', 'Ipv6CidrBlocks')),
-                AssignIpv6AddressOnCreation: true,
                 MapPublicIpOnLaunch: false,
                 Tags: [{
                     Key: 'Name',
@@ -159,15 +121,6 @@ export default {
                 RouteTableId: cf.ref('PublicRouteTable'),
                 DestinationCidrBlock: '0.0.0.0/0',
                 GatewayId: cf.ref('InternetGateway')
-            }
-        },
-        PublicRouteV6: {
-            Type: 'AWS::EC2::Route',
-            DependsOn:  'EgressOnlyInternetGateway',
-            Properties: {
-                RouteTableId: cf.ref('PublicRouteTable'),
-                DestinationIpv6CidrBlock: '::/0',
-                GatewayId: cf.ref('EgressOnlyInternetGateway')
             }
         },
         SubnetPublicAAssoc: {
@@ -272,24 +225,6 @@ export default {
                 RouteTableId: cf.ref('PrivateRouteTableB'),
                 DestinationCidrBlock: '0.0.0.0/0',
                 NatGatewayId: cf.ref('NatGatewayB')
-            }
-        },
-        PrivateRouteV6A: {
-            Type: 'AWS::EC2::Route',
-            DependsOn:  'EgressOnlyInternetGateway',
-            Properties: {
-                RouteTableId: cf.ref('PrivateRouteTableA'),
-                DestinationIpv6CidrBlock: '::/0',
-                GatewayId: cf.ref('EgressOnlyInternetGateway')
-            }
-        },
-        PrivateRouteV6B: {
-            Type: 'AWS::EC2::Route',
-            DependsOn:  'EgressOnlyInternetGateway',
-            Properties: {
-                RouteTableId: cf.ref('PrivateRouteTableB'),
-                DestinationIpv6CidrBlock: '::/0',
-                GatewayId: cf.ref('EgressOnlyInternetGateway')
             }
         },
         SubnetPrivateAAssoc: {
