@@ -12,6 +12,10 @@
 
 ### Pending Release
 
+### v1.7.0
+
+- :rocket: Include Hosted Zone information at root VPC Level
+
 ### v1.6.0
 
 - :rocket: Expose a NGW per AG to improve resiliency in case of an AG outage
