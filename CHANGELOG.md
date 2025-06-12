@@ -12,6 +12,11 @@
 
 ### Pending Release
 
+### v2.1.0
+
+- :rocket: Include ELB Logs Bucket
+- :rocket: Include ECS Cluster
+
 ### v2.0.0
 
 - BREAKING: Change expected prefix to `tak-vpc`

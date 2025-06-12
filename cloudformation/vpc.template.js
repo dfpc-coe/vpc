@@ -1,6 +1,8 @@
 import cf from '@openaddresses/cloudfriend';
 import VPC from './lib/vpc.js';
 import Connect from './lib/connect.js';
+import ELBLogs from './lib/elb-logs.js';
+import ECSCluster from './lib/ecs-cluster.js';
 
 export default cf.merge({
     Description: 'Template for @tak-ps/vpc',
@@ -34,4 +36,4 @@ export default cf.merge({
             Value: cf.ref('HostedZoneID')
         }
     }
-}, VPC, Connect);
+}, VPC, Connect, ELBLogs, ECSCluster);
