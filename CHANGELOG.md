@@ -12,6 +12,10 @@
 
 ### Pending Release
 
+### v2.0.0
+
+- BREAKING: Change expected prefix to `tak-vpc`
+
 ### v1.7.0
 
 - :rocket: Include Hosted Zone information at root VPC Level
