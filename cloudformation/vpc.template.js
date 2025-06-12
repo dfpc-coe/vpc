@@ -31,7 +31,7 @@ export default cf.merge({
             Export: {
                 Name: cf.join([cf.stackName, '-hosted-zone-id'])
             },
-            Value: cf.ref('Route53ZoneID')
+            Value: cf.ref('HostedZoneID')
         }
     }
 }, VPC, Connect);
