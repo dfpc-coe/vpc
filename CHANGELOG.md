@@ -12,6 +12,10 @@
 
 ### Pending Release
 
+### v2.1.1
+
+- :arrow_up: Update Core Linting Deps
+
 ### v2.1.0
 
 - :rocket: Include ELB Logs Bucket
