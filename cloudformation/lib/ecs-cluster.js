@@ -6,6 +6,10 @@ export default {
             Type: 'AWS::ECS::Cluster',
             Properties: {
                 ClusterName: cf.stackName,
+                ClusterSettings: [{
+                    Name: 'containerInsights',
+                    Value: 'enhanced'
+                }],
                 CapacityProviders: ['FARGATE'],
                 DefaultCapacityProviderStrategy: [{
                     Base: 0,
