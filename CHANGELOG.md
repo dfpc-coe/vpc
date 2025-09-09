@@ -12,6 +12,10 @@
 
 ### Pending Release
 
+### v2.2.0
+
+- :rocket: Enable `enhanced` container insights
+
 ### v2.1.1
 
 - :arrow_up: Update Core Linting Deps
