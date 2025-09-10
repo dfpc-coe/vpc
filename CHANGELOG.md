@@ -12,6 +12,10 @@
 
 ### Pending Release
 
+### v2.3.0
+
+- :rocket: Setup a container for AWS myApplication
+
 ### v2.2.0
 
 - :rocket: Enable `enhanced` container insights

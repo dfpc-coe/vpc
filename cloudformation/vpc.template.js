@@ -18,6 +18,20 @@ export default cf.merge({
         HostedZoneName: {
             Description: 'Each VPC is designed to support a TAK environment on a single Hosted Zone',
             Type: 'String'
+        },
+        Environment: {
+            Description: 'StackName postfix of the environment - IE "dev", "staging", "prod"',
+            Type: 'String',
+            Default: 'cotak-prod'
+        }
+    },
+    Resources: {
+        Application: {
+            Type: 'AWS::ServiceCatalogAppRegistry::Application',
+            Properties: {
+                Name: cf.ref('Environment'),
+                Description: "TAK Server Application Stack"
+            },
         }
     },
     Outputs: {
