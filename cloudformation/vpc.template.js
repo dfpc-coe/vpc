@@ -32,9 +32,25 @@ export default cf.merge({
                 Name: cf.ref('Environment'),
                 Description: "TAK Server Application Stack"
             },
+        },
+        ApplicationAssociation: {
+            Type: 'AWS::ServiceCatalogAppRegistry::ResourceAssociation',
+            DependsOn: 'Application',
+            Properties: {
+                Application: cf.getAtt('Application', 'Arn'),
+                Resource: cf.stackId,
+                ResourceType: 'CFN_STACK'
+            }
         }
     },
     Outputs: {
+        ApplicationARN: {
+            Description: 'Service Catalog Application ID',
+            Export: {
+                Name: cf.join([cf.stackName, '-application'])
+            },
+            Value: cf.ref('Application')
+        },
         HostedZoneName: {
             Description: 'HostedZoneName for TAK Deployment',
             Export: {
