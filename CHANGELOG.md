@@ -12,6 +12,10 @@
 
 ### Pending Release
 
+### v2.4.0
+
+- :rocket: Associate self with myApplication
+
 ### v2.3.0
 
 - :rocket: Setup a container for AWS myApplication
