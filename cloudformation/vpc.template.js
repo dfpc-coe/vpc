@@ -1,5 +1,6 @@
 import cf from '@openaddresses/cloudfriend';
 import VPC from './lib/vpc.js';
+import KMS from './lib/kms.js';
 import Connect from './lib/connect.js';
 import ELBLogs from './lib/elb-logs.js';
 import ECSCluster from './lib/ecs-cluster.js';
@@ -66,4 +67,4 @@ export default cf.merge({
             Value: cf.ref('HostedZoneID')
         }
     }
-}, VPC, Connect, ELBLogs, ECSCluster);
+}, VPC, KMS, Connect, ELBLogs, ECSCluster);

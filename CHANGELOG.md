@@ -12,6 +12,10 @@
 
 ### Pending Release
 
+### v2.5.0
+
+- :rocket: Add top level KMS Key for encrypting logs & performance metrics
+
 ### v2.4.0
 
 - :rocket: Associate self with myApplication
