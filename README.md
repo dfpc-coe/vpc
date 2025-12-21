@@ -13,11 +13,12 @@ npm install
 ```
 
 ### 2. CloudFormation Stack Deployment
+
 Deployment to AWS is handled via AWS Cloudformation. The template can be found in the `./cloudformation`
 directory. The deployment itself is performed by [Deploy](https://github.com/openaddresses/deploy) which
 was installed in the previous step.
 
-> [!NOTE] 
+> [!NOTE]
 > The deploy tool can be run via the following
 >
 > ```sh
@@ -27,7 +28,7 @@ was installed in the previous step.
 > To install it globally - view the deploy [README](https://github.com/openaddresses/deploy)
 >
 > Deploy uses your existing AWS credentials. Ensure that your `~/.aws/credentials` has an entry like:
-> 
+>
 > ```
 > [coe]
 > aws_access_key_id = <redacted>
@@ -40,16 +41,24 @@ Deployment can then be performed via the following:
 npx deploy create <stack>
 ```
 
-> [!NOTE] 
+> ![NOTE]
+> This template assumes the presense of the ECS Linked Role. If the role is not present in your account
+> the stack deployment will fail. To create the role, run the following AWS CLI command:
+> 
+> ```
+> aws iam create-service-linked-role --aws-service-name ecs.amazonaws.com
+> ```
+
+> [!NOTE]
 > Stacks can be created, deleted, cancelled, etc all via the deploy tool. For further information
 > information about `deploy` functionality run the following for help.
-> 
+>
 > ```sh
 > npx deploy
 > ```
-> 
+>
 > Further help about a specific command can be obtained via something like:
-> 
+>
 > ```sh
 > npx deploy info --help
 > ```
@@ -61,7 +70,7 @@ The CloudFormation template creates the below depicted AWS resources.
 <img src="../../raw/main/documentation/images/dfpc-coe-vpc.png">
 Image Source: <a href="../../raw/main/documentation/images/dfpc-coe-vpc.drawio">dfpc-coe-vpc.drawio</a>
 
-> [!NOTE] 
+> [!NOTE]
 > AWS only supports [one EC2 Instance Connect Endpoint per VPC and per subnet](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/connect-with-ec2-instance-connect-endpoint.html#ec2-instance-connect-endpoint-prerequisites).
 
 ## Estimated Cost
