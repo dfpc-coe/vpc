@@ -56,7 +56,7 @@ export default {
         RepositoryCloudTAKGeofence: {
             Type: 'AWS::ECR::Repository',
             Properties: {
-                RepositoryName: cf.join([cf.stackName, '-clodutak-geofence']),
+                RepositoryName: cf.join([cf.stackName, '-cloudtak-geofence']),
                 RepositoryPolicyText: {
                     Version: '2012-10-17',
                     Statement: [{
