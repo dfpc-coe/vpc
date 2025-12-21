@@ -31,7 +31,7 @@ export default {
                                         'arn:',
                                         cf.partition,
                                         ':iam::',
-                                        { 'Fn::FindInMap': [ 'ELBRegion', cf.region, 'ELBAccount', { DefaultValue: 'DEFAULT' }] },
+                                        { 'Fn::FindInMap': ['ELBRegion', cf.region, 'ELBAccount', { DefaultValue: 'DEFAULT' }] },
                                         ':root'
                                     ]),
                                     cf.noValue
@@ -89,12 +89,12 @@ export default {
     },
     Conditions: {
         OldPrincipal: cf.notEquals({
-            'Fn::FindInMap': [ 'ELBRegion', cf.region, 'ELBAccount', {
+            'Fn::FindInMap': ['ELBRegion', cf.region, 'ELBAccount', {
                 DefaultValue: 'DEFAULT'
             }]
         }, 'DEFAULT'),
         NewPrincipal: cf.equals({
-            'Fn::FindInMap': [ 'ELBRegion', cf.region, 'ELBAccount', {
+            'Fn::FindInMap': ['ELBRegion', cf.region, 'ELBAccount', {
                 DefaultValue: 'DEFAULT'
             }]
         }, 'DEFAULT')
@@ -186,4 +186,4 @@ export default {
             Value: cf.ref('LogBucket')
         }
     }
-}
+};

@@ -2,6 +2,7 @@ import cf from '@openaddresses/cloudfriend';
 import VPC from './lib/vpc.js';
 import KMS from './lib/kms.js';
 import Connect from './lib/connect.js';
+import ECR from './lib/ecr.js';
 import ELBLogs from './lib/elb-logs.js';
 import ECSCluster from './lib/ecs-cluster.js';
 
@@ -31,8 +32,8 @@ export default cf.merge({
             Type: 'AWS::ServiceCatalogAppRegistry::Application',
             Properties: {
                 Name: cf.ref('Environment'),
-                Description: "TAK Server Application Stack"
-            },
+                Description: 'TAK Server Application Stack'
+            }
         },
         ApplicationAssociation: {
             Type: 'AWS::ServiceCatalogAppRegistry::ResourceAssociation',
@@ -67,4 +68,4 @@ export default cf.merge({
             Value: cf.ref('HostedZoneID')
         }
     }
-}, VPC, KMS, Connect, ELBLogs, ECSCluster);
+}, VPC, KMS, Connect, ELBLogs, ECSCluster, ECR);

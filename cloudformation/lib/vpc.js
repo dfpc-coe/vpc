@@ -20,7 +20,7 @@ export default {
             Properties: {
                 AmazonProvidedIpv6CidrBlock: true,
                 VpcId: cf.ref('VPC')
-            }   
+            }
         },
         SubnetPublicA: {
             Type: 'AWS::EC2::Subnet',
@@ -37,7 +37,7 @@ export default {
                     Value: cf.join([cf.stackName, '-subnet-public-a'])
                 }]
             }
-        },  
+        },
         SubnetPublicB: {
             Type: 'AWS::EC2::Subnet',
             DependsOn: 'VPCCIDR',
@@ -52,8 +52,8 @@ export default {
                     Key: 'Name',
                     Value: cf.join([cf.stackName, '-subnet-public-b'])
                 }]
-            }       
-        },          
+            }
+        },
         SubnetPrivateA: {
             Type: 'AWS::EC2::Subnet',
             Properties: {
@@ -74,7 +74,7 @@ export default {
             Properties: {
                 AvailabilityZone: cf.select(1, cf.getAzs(cf.region)),
                 VpcId: cf.ref('VPC'),
-                //CidrBlock: '10.0.4.0/24',
+                // CidrBlock: '10.0.4.0/24',
                 CidrBlock: cf.select(3, cf.cidr(cf.getAtt('VPC', 'CidrBlock'),256,8)),                            // Select the third out of 256 possible /24 IPv4 subnets from the VPC /16 IPv4 CIDR
                 Ipv6CidrBlock: cf.select(3, cf.cidr(cf.select(0, cf.getAtt('VPC', 'Ipv6CidrBlocks')),256,64)),    // Select the third out of 256 possible /64 IPv6 subnets from the VPC /56 IPv6 CIDR
                 AssignIpv6AddressOnCreation: true,
@@ -89,9 +89,9 @@ export default {
             Type: 'AWS::EC2::VPCEndpoint',
             Properties: {
                 VpcEndpointType: 'Gateway',
-                RouteTableIds: [ cf.ref('PublicRouteTable') ],
+                RouteTableIds: [cf.ref('PublicRouteTable')],
                 ServiceName: cf.join(['com.amazonaws.', cf.region, '.s3']),
-                VpcId: cf.ref('VPC'),
+                VpcId: cf.ref('VPC')
             }
         },
         InternetGateway: {

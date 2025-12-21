@@ -17,6 +17,6 @@ export default {
                     Weight: 0
                 }]
             }
-        },
+        }
     }
 };
