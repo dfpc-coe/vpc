@@ -12,6 +12,10 @@
 
 ### Pending Release
 
+### v2.6.0
+
+- :tada: Introduce top level ECR Repositorie for child stacks
+
 ### v2.5.0
 
 - :rocket: Add top level KMS Key for encrypting logs & performance metrics
