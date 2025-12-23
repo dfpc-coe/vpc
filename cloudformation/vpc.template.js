@@ -5,6 +5,7 @@ import Connect from './lib/connect.js';
 import ECR from './lib/ecr.js';
 import ELBLogs from './lib/elb-logs.js';
 import ECSCluster from './lib/ecs-cluster.js';
+import ACM from './lib/acm.js';
 
 export default cf.merge({
     Description: 'Template for @tak-ps/vpc',
@@ -68,4 +69,4 @@ export default cf.merge({
             Value: cf.ref('HostedZoneID')
         }
     }
-}, VPC, KMS, Connect, ELBLogs, ECSCluster, ECR);
+}, VPC, KMS, Connect, ELBLogs, ECSCluster, ECR, ACM);
