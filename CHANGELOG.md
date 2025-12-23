@@ -12,6 +12,10 @@
 
 ### Pending Release
 
+### v2.7.0
+
+- :tada: Introduce ACM
+
 ### v2.6.0
 
 - :tada: Introduce top level ECR Repositorie for child stacks
