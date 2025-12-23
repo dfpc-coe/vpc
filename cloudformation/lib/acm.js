@@ -11,6 +11,9 @@ export default {
                 ],
                 ValidationMethod: 'DNS',
                 DomainValidationOptions: [{
+                    DomainName: cf.ref('HostedZoneName'),
+                    HostedZoneId: cf.ref('HostedZoneID')
+                },{
                     DomainName: cf.join(['*.', cf.ref('HostedZoneName')]),
                     HostedZoneId: cf.ref('HostedZoneID')
                 }, {

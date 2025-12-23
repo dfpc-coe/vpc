@@ -12,6 +12,10 @@
 
 ### Pending Release
 
+### v2.9.0
+
+- :rocket: Include Root in ACM
+
 ### v2.8.0
 
 - :rocket: Introduce Principal Limits for ECR
