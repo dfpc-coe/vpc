@@ -10,7 +10,9 @@ export default {
                     Version: '2012-10-17',
                     Statement: [{
                         Effect: 'Allow',
-                        Principal: '*',
+                        Principal: {
+                            AWS: cf.join(['arn:', cf.partition, ':iam::', cf.accountId, ':root'])
+                        },
                         Action: [
                             'ecr:BatchGetImage',
                             'ecr:GetDownloadUrlForLayer'
@@ -27,7 +29,9 @@ export default {
                     Version: '2012-10-17',
                     Statement: [{
                         Effect: 'Allow',
-                        Principal: '*',
+                        Principal: {
+                            AWS: cf.join(['arn:', cf.partition, ':iam::', cf.accountId, ':root'])
+                        },
                         Action: [
                             'ecr:BatchGetImage',
                             'ecr:GetDownloadUrlForLayer'
@@ -44,7 +48,9 @@ export default {
                     Version: '2012-10-17',
                     Statement: [{
                         Effect: 'Allow',
-                        Principal: '*',
+                        Principal: {
+                            AWS: cf.join(['arn:', cf.partition, ':iam::', cf.accountId, ':root'])
+                        },
                         Action: [
                             'ecr:BatchGetImage',
                             'ecr:GetDownloadUrlForLayer'
@@ -61,7 +67,9 @@ export default {
                     Version: '2012-10-17',
                     Statement: [{
                         Effect: 'Allow',
-                        Principal: '*',
+                        Principal: {
+                            AWS: cf.join(['arn:', cf.partition, ':iam::', cf.accountId, ':root'])
+                        },
                         Action: [
                             'ecr:BatchGetImage',
                             'ecr:GetDownloadUrlForLayer'
@@ -78,7 +86,9 @@ export default {
                     Version: '2012-10-17',
                     Statement: [{
                         Effect: 'Allow',
-                        Principal: '*',
+                        Principal: {
+                            AWS: cf.join(['arn:', cf.partition, ':iam::', cf.accountId, ':root'])
+                        },
                         Action: [
                             'ecr:BatchGetImage',
                             'ecr:GetDownloadUrlForLayer'
@@ -95,7 +105,9 @@ export default {
                     Version: '2012-10-17',
                     Statement: [{
                         Effect: 'Allow',
-                        Principal: '*',
+                        Principal: {
+                            AWS: cf.join(['arn:', cf.partition, ':iam::', cf.accountId, ':root'])
+                        },
                         Action: [
                             'ecr:BatchGetImage',
                             'ecr:GetDownloadUrlForLayer'

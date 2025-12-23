@@ -12,6 +12,11 @@
 
 ### Pending Release
 
+### v2.8.0
+
+- :rocket: Introduce Principal Limits for ECR
+- :rocket: Enable KMS Key Rotation
+
 ### v2.7.0
 
 - :tada: Introduce ACM

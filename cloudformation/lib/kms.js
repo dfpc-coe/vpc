@@ -14,7 +14,7 @@ export default {
             Properties: {
                 Description: 'Used to encrypt logs & metrics related to platform operations',
                 Enabled: true,
-                EnableKeyRotation: false,
+                EnableKeyRotation: true,
                 KeyPolicy: {
                     Id: cf.stackName,
                     Statement: [{
