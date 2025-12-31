@@ -55,6 +55,20 @@ export default {
                             'ecr:BatchGetImage',
                             'ecr:GetDownloadUrlForLayer'
                         ]
+                    },{
+                        Effect: 'Allow',
+                        Principal: {
+                            Service: 'lambda.amazonaws.com'
+                        },
+                        Action: [
+                            'ecr:BatchGetImage',
+                            'ecr:GetDownloadUrlForLayer'
+                        ],
+                        Condition: {
+                            StringLike: {
+                                'aws:sourceArn': cf.join(['arn:', cf.partition, ':lambda:', cf.region, ':', cf.accountId, ':function:*'])
+                            }
+                        }
                     }]
                 }
             }

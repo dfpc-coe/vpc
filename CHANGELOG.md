@@ -12,6 +12,10 @@
 
 ### Pending Release
 
+### v2.10.0
+
+- :bug: Update Lambda Access to ECR Policy
+
 ### v2.9.0
 
 - :rocket: Include Root in ACM
