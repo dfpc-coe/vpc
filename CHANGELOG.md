@@ -12,6 +12,10 @@
 
 ### Pending Release
 
+### v2.11.0
+
+- :rocket: Export CIDR IPv6 Blocks
+
 ### v2.10.0
 
 - :bug: Update Lambda Access to ECR Policy
