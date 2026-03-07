@@ -302,6 +302,13 @@ export default {
             },
             Value: cf.getAtt('VPC', 'CidrBlock')
         },
+        VPCCIDRIpv6: {
+            Description: 'VPC IPv6 CIDR Block',
+            Export: {
+                Name: cf.join([cf.stackName, '-vpc-cidr-ipv6'])
+            },
+            Value: cf.select(0, cf.getAtt('VPC', 'Ipv6CidrBlocks'))
+        },
         SubnetPublicA: {
             Description: 'Subnet Public A',
             Export: {
