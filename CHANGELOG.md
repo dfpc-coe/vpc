@@ -12,6 +12,10 @@
 
 ### Pending Release
 
+### v2.12.0
+
+- :rocket: Add LifeCycle policy to delete old images in ECR
+
 ### v2.11.0
 
 - :rocket: Export CIDR IPv6 Blocks
