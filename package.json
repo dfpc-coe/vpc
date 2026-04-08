@@ -4,11 +4,11 @@
     "version": "2.11.0",
     "description": "Create and Manage VPCs with CloudFormation",
     "scripts": {
-        "lint": "eslint cloudformation/",
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "lint": "eslint cloudformation/ src/ tests/",
+        "test": "node --test"
     },
     "engines": {
-        "node": ">= 18"
+        "node": ">= 24"
     },
     "repository": {
         "type": "git",
@@ -22,11 +22,12 @@
     "homepage": "https://github.com/tak-ps/vpc#readme",
     "dependencies": {
         "@openaddresses/cloudfriend": "^7.0.0",
-        "@openaddresses/deploy": "^9.0.0"
+        "@openaddresses/deploy": "^10.0.0"
     },
     "devDependencies": {
         "@eslint/js": "^10.0.1",
         "eslint": "^10.0.0",
-        "eslint-plugin-n": "^17.2.1"
+        "eslint-plugin-n": "^17.2.1",
+        "sinon": "^21.0.3"
     }
 }

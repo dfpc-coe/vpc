@@ -1,11 +1,42 @@
 import cf from '@openaddresses/cloudfriend';
 
+const lifecyclePolicyText = JSON.stringify({
+    rules: [{
+        rulePriority: 1,
+        description: 'Retain images tagged with an active prefix',
+        selection: {
+            tagStatus: 'tagged',
+            tagPrefixList: ['active'],
+            countType: 'imageCountMoreThan',
+            countNumber: 999999
+        },
+        action: {
+            type: 'expire'
+        }
+    }, {
+        rulePriority: 2,
+        description: 'Expire images older than 30 days unless tagged with an active prefix',
+        selection: {
+            tagStatus: 'any',
+            countType: 'sinceImagePushed',
+            countUnit: 'days',
+            countNumber: 30
+        },
+        action: {
+            type: 'expire'
+        }
+    }]
+});
+
 export default {
     Resources: {
         RepositoryCloudTAK: {
             Type: 'AWS::ECR::Repository',
             Properties: {
                 RepositoryName: cf.join([cf.stackName, '-cloudtak-api']),
+                LifecyclePolicy: {
+                    LifecyclePolicyText: lifecyclePolicyText
+                },
                 RepositoryPolicyText: {
                     Version: '2012-10-17',
                     Statement: [{
@@ -25,6 +56,9 @@ export default {
             Type: 'AWS::ECR::Repository',
             Properties: {
                 RepositoryName: cf.join([cf.stackName, '-auth']),
+                LifecyclePolicy: {
+                    LifecyclePolicyText: lifecyclePolicyText
+                },
                 RepositoryPolicyText: {
                     Version: '2012-10-17',
                     Statement: [{
@@ -44,6 +78,9 @@ export default {
             Type: 'AWS::ECR::Repository',
             Properties: {
                 RepositoryName: cf.join([cf.stackName, '-cloudtak-tasks']),
+                LifecyclePolicy: {
+                    LifecyclePolicyText: lifecyclePolicyText
+                },
                 RepositoryPolicyText: {
                     Version: '2012-10-17',
                     Statement: [{
@@ -77,6 +114,9 @@ export default {
             Type: 'AWS::ECR::Repository',
             Properties: {
                 RepositoryName: cf.join([cf.stackName, '-cloudtak-geofence']),
+                LifecyclePolicy: {
+                    LifecyclePolicyText: lifecyclePolicyText
+                },
                 RepositoryPolicyText: {
                     Version: '2012-10-17',
                     Statement: [{
@@ -96,6 +136,9 @@ export default {
             Type: 'AWS::ECR::Repository',
             Properties: {
                 RepositoryName: cf.join([cf.stackName, '-cloudtak-media']),
+                LifecyclePolicy: {
+                    LifecyclePolicyText: lifecyclePolicyText
+                },
                 RepositoryPolicyText: {
                     Version: '2012-10-17',
                     Statement: [{
@@ -115,6 +158,9 @@ export default {
             Type: 'AWS::ECR::Repository',
             Properties: {
                 RepositoryName: cf.join([cf.stackName, '-takserver']),
+                LifecyclePolicy: {
+                    LifecyclePolicyText: lifecyclePolicyText
+                },
                 RepositoryPolicyText: {
                     Version: '2012-10-17',
                     Statement: [{

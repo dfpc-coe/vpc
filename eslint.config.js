@@ -35,7 +35,29 @@ export default [
             "keyword-spacing": [ "error", { "before": true, "after": true } ],
             "template-curly-spacing": [ "error", "never" ],
             "semi-spacing": "error",
-            "strict": "error",
+            "strict": "error"
+        }
+    },
+    {
+        files: ["src/**/*.js"],
+        languageOptions: {
+            sourceType: "commonjs",
+            globals: {
+                exports: "writable",
+                module: "readonly",
+                require: "readonly"
+            }
+        },
+        rules: {
+            "n/no-extraneous-require": "off",
+            "no-undef": "off",
+            "strict": "off"
+        }
+    },
+    {
+        files: ["tests/**/*.js"],
+        rules: {
+            "n/no-unpublished-import": "off"
         }
     }
-]
+];
