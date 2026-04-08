@@ -4,8 +4,52 @@ const { ECRClient, DescribeImagesCommand, BatchGetImageCommand, PutImageCommand,
 const ecs = new ECSClient({});
 const ecr = new ECRClient({});
 
-const cluster = process.env.CLUSTER_NAME;
-const repositories = new Set(process.env.REPOSITORIES.split(','));
+const MAX_CONCURRENT_TASK_DEFINITIONS = 5;
+
+function getRequiredEnv(name) {
+    const value = process.env[name];
+
+    if (typeof value !== 'string' || value.trim() === '') {
+        throw new Error(`Missing required environment variable: ${name}`);
+    }
+
+    return value.trim();
+}
+
+function parseRepositories(value) {
+    const repositoryNames = value
+        .split(',')
+        .map((repository) => repository.trim())
+        .filter(Boolean);
+
+    if (repositoryNames.length === 0) {
+        throw new Error('Missing required environment variable: REPOSITORIES must contain at least one repository name');
+    }
+
+    return new Set(repositoryNames);
+}
+
+async function mapWithConcurrency(items, concurrency, iteratee) {
+    const results = new Array(items.length);
+    let nextIndex = 0;
+
+    async function worker() {
+        while (nextIndex < items.length) {
+            const currentIndex = nextIndex;
+            nextIndex += 1;
+            results[currentIndex] = await iteratee(items[currentIndex], currentIndex);
+        }
+    }
+
+    await Promise.all(Array.from({ length: Math.min(concurrency, items.length) }, () => {
+        return worker();
+    }));
+
+    return results;
+}
+
+const cluster = getRequiredEnv('CLUSTER_NAME');
+const repositories = parseRepositories(getRequiredEnv('REPOSITORIES'));
 const imageDigestCache = {};
 
 function tagFor(serviceName, containerName) {
@@ -84,23 +128,32 @@ async function resolveDigest(repository, reference) {
         return imageDigestCache[cacheKey];
     }
 
-    const response = await ecr.send(new DescribeImagesCommand({
-        repositoryName: repository,
-        imageIds: [reference.startsWith('sha256:') ? {
-            imageDigest: reference
-        } : {
-            imageTag: reference
-        }]
-    }));
+    imageDigestCache[cacheKey] = (async () => {
+        const response = await ecr.send(new DescribeImagesCommand({
+            repositoryName: repository,
+            imageIds: [reference.startsWith('sha256:') ? {
+                imageDigest: reference
+            } : {
+                imageTag: reference
+            }]
+        }));
 
-    const digest = response.imageDetails?.[0]?.imageDigest;
+        const digest = response.imageDetails?.[0]?.imageDigest;
 
-    if (!digest) {
-        throw new Error(`Missing digest for ${repository}:${reference}`);
+        if (!digest) {
+            throw new Error(`Missing digest for ${repository}:${reference}`);
+        }
+
+        imageDigestCache[cacheKey] = digest;
+        return digest;
+    })();
+
+    try {
+        return await imageDigestCache[cacheKey];
+    } catch (error) {
+        delete imageDigestCache[cacheKey];
+        throw error;
     }
-
-    imageDigestCache[cacheKey] = digest;
-    return digest;
 }
 
 async function fetchManifest(repository, digest) {
@@ -112,31 +165,44 @@ async function fetchManifest(repository, digest) {
     return response.images?.[0]?.imageManifest;
 }
 
+async function collectServiceActiveTags(service) {
+    const taskDefinition = await ecs.send(new DescribeTaskDefinitionCommand({
+        taskDefinition: service.taskDefinition
+    }));
+    const serviceActiveTags = [];
+
+    for (const containerDefinition of taskDefinition.taskDefinition?.containerDefinitions || []) {
+        const image = parseImageReference(containerDefinition.image);
+
+        if (!image || !repositories.has(image.repository)) {
+            continue;
+        }
+
+        serviceActiveTags.push({
+            imageDigest: await resolveDigest(image.repository, image.reference),
+            imageTag: tagFor(
+                service.serviceName || taskDefinition.taskDefinition?.family || 'service',
+                containerDefinition.name || 'container'
+            ),
+            repository: image.repository
+        });
+    }
+
+    return serviceActiveTags;
+}
+
 async function findDesiredActiveTags() {
     const desiredActiveTags = new Map();
     const serviceArns = await listServices();
     const services = await describeServices(serviceArns);
+    const serviceActiveTags = await mapWithConcurrency(services, MAX_CONCURRENT_TASK_DEFINITIONS, collectServiceActiveTags);
 
-    for (const service of services) {
-        const taskDefinition = await ecs.send(new DescribeTaskDefinitionCommand({
-            taskDefinition: service.taskDefinition
-        }));
+    for (const repositoryActiveTags of serviceActiveTags) {
+        for (const repositoryActiveTag of repositoryActiveTags) {
+            const activeTags = desiredActiveTags.get(repositoryActiveTag.repository) || new Map();
 
-        for (const containerDefinition of taskDefinition.taskDefinition?.containerDefinitions || []) {
-            const image = parseImageReference(containerDefinition.image);
-
-            if (!image || !repositories.has(image.repository)) {
-                continue;
-            }
-
-            const activeTags = desiredActiveTags.get(image.repository) || new Map();
-            const activeTag = tagFor(
-                service.serviceName || taskDefinition.taskDefinition?.family || 'service',
-                containerDefinition.name || 'container'
-            );
-
-            activeTags.set(activeTag, await resolveDigest(image.repository, image.reference));
-            desiredActiveTags.set(image.repository, activeTags);
+            activeTags.set(repositoryActiveTag.imageTag, repositoryActiveTag.imageDigest);
+            desiredActiveTags.set(repositoryActiveTag.repository, activeTags);
         }
     }
 

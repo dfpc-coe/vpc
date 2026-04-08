@@ -62,7 +62,7 @@ test('reconciles active tags, sanitizes names, and removes stale legacy tags', a
 
     const { ecsSend, ecrSend, handler } = setupTest(t, {
         CLUSTER_NAME: 'tak-cluster',
-        REPOSITORIES: 'stack-cloudtak-api'
+        REPOSITORIES: ' stack-cloudtak-api , '
     });
 
     ecsSend.callsFake(async (command) => {
@@ -204,6 +204,21 @@ test('reconciles active tags, sanitizes names, and removes stale legacy tags', a
     assert.deepEqual(normalize(deleteInputs), [[{
         imageTag: 'active'
     }]]);
+});
+
+test('fails fast when required environment variables are missing or empty', () => {
+    assert.throws(() => {
+        loadLambdaTagger({
+            REPOSITORIES: 'stack-cloudtak-api'
+        });
+    }, /Missing required environment variable: CLUSTER_NAME/);
+
+    assert.throws(() => {
+        loadLambdaTagger({
+            CLUSTER_NAME: 'tak-cluster',
+            REPOSITORIES: '   '
+        });
+    }, /Missing required environment variable: REPOSITORIES/);
 });
 
 test('skips updates when digest-based image references already match active tags', async (t) => {

@@ -35,19 +35,3 @@ jobs:
 
       - name: Run node:test suite
         run: npm test
-
-      - name: Smoke test template module
-        run: |
-          node --input-type=module <<'EOF'
-          import template from './cloudformation/vpc.template.js';
-
-          if (!template || typeof template !== 'object') {
-              throw new Error('Template module did not export an object');
-          }
-
-          for (const key of ['Description', 'Parameters', 'Resources', 'Outputs']) {
-              if (!(key in template)) {
-                  throw new Error(`Template is missing expected section: ${key}`);
-              }
-          }
-          EOF

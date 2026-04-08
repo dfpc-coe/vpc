@@ -72,12 +72,12 @@ export default {
         ECRActiveTaggerFunction: {
             Type: 'AWS::Lambda::Function',
             Properties: {
-                Description: 'Tag in-use ECR images as active and untag inactive ones',
+                Description: 'Tag in-use ECR images with active-* tags and remove stale active tags',
                 FunctionName: cf.join([cf.stackName, '-ecr-active']),
                 Handler: 'index.handler',
                 MemorySize: 256,
                 Role: cf.getAtt('ECRActiveTaggerRole', 'Arn'),
-                Runtime: 'nodejs20.x',
+                Runtime: 'nodejs24.x',
                 Timeout: 300,
                 Environment: {
                     Variables: {
