@@ -3,6 +3,7 @@ import VPC from './lib/vpc.js';
 import KMS from './lib/kms.js';
 import Connect from './lib/connect.js';
 import ECR from './lib/ecr.js';
+import ECRLambda from './lib/ecr-lambda.js';
 import ELBLogs from './lib/elb-logs.js';
 import ECSCluster from './lib/ecs-cluster.js';
 import ACM from './lib/acm.js';
@@ -69,4 +70,4 @@ export default cf.merge({
             Value: cf.ref('HostedZoneID')
         }
     }
-}, VPC, KMS, Connect, ELBLogs, ECSCluster, ECR, ACM);
+}, VPC, KMS, Connect, ELBLogs, ECSCluster, ECR, ECRLambda, ACM);

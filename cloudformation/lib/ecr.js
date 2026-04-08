@@ -3,7 +3,7 @@ import cf from '@openaddresses/cloudfriend';
 const lifecyclePolicyText = JSON.stringify({
     rules: [{
         rulePriority: 1,
-        description: 'Retain images tagged active',
+        description: 'Retain images tagged with an active prefix',
         selection: {
             tagStatus: 'tagged',
             tagPrefixList: ['active'],
@@ -15,7 +15,7 @@ const lifecyclePolicyText = JSON.stringify({
         }
     }, {
         rulePriority: 2,
-        description: 'Expire images older than 30 days unless tagged active',
+        description: 'Expire images older than 30 days unless tagged with an active prefix',
         selection: {
             tagStatus: 'any',
             countType: 'sinceImagePushed',
