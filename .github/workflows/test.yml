@@ -33,6 +33,9 @@ jobs:
       - name: Lint CloudFormation sources
         run: npm run lint
 
+      - name: Run node:test suite
+        run: npm test
+
       - name: Smoke test template module
         run: |
           node --input-type=module <<'EOF'

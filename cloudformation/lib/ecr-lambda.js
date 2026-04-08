@@ -2,12 +2,12 @@ import fs from 'node:fs';
 import cf from '@openaddresses/cloudfriend';
 
 const repositoryNames = [
-    'cloudtak-api',
     'auth',
+    'takserver',
+    'cloudtak-api',
     'cloudtak-tasks',
     'cloudtak-geofence',
-    'cloudtak-media',
-    'takserver'
+    'cloudtak-media'
 ].map((suffix) => {
     return cf.join([cf.stackName, '-', suffix]);
 });

@@ -4,11 +4,11 @@
     "version": "2.11.0",
     "description": "Create and Manage VPCs with CloudFormation",
     "scripts": {
-        "lint": "eslint cloudformation/",
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "lint": "eslint cloudformation/ src/ tests/",
+        "test": "node --test"
     },
     "engines": {
-            "node": ">= 24"
+        "node": ">= 24"
     },
     "repository": {
         "type": "git",
@@ -27,6 +27,7 @@
     "devDependencies": {
         "@eslint/js": "^10.0.1",
         "eslint": "^10.0.0",
-        "eslint-plugin-n": "^17.2.1"
+        "eslint-plugin-n": "^17.2.1",
+        "sinon": "^21.0.3"
     }
 }
