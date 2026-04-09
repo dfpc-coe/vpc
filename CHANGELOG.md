@@ -12,6 +12,10 @@
 
 ### Pending Release
 
+### v2.12.1
+
+- :bug: Excempt Tasks from lifecycle policy
+
 ### v2.12.0
 
 - :rocket: Add LifeCycle policy to delete old images in ECR
