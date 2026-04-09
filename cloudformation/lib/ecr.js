@@ -78,9 +78,6 @@ export default {
             Type: 'AWS::ECR::Repository',
             Properties: {
                 RepositoryName: cf.join([cf.stackName, '-cloudtak-tasks']),
-                LifecyclePolicy: {
-                    LifecyclePolicyText: lifecyclePolicyText
-                },
                 RepositoryPolicyText: {
                     Version: '2012-10-17',
                     Statement: [{
