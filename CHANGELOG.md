@@ -12,6 +12,10 @@
 
 ### Pending Release
 
+### v2.13.0
+
+- :tada: Add CloudTAK-DJI ECR Repository
+
 ### v2.12.1
 
 - :bug: Excempt Tasks from lifecycle policy

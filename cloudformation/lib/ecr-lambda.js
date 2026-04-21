@@ -5,6 +5,7 @@ const repositoryNames = [
     'auth',
     'takserver',
     'cloudtak-api',
+    'cloudtak-dji',
     'cloudtak-geofence',
     'cloudtak-media'
 ].map((suffix) => {
