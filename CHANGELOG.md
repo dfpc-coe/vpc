@@ -12,6 +12,10 @@
 
 ### Pending Release
 
+### v2.14.0
+
+- :tada: Add COTURN ECR Repository
+
 ### v2.13.0
 
 - :tada: Add CloudTAK-DJI ECR Repository
