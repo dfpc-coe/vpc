@@ -12,6 +12,10 @@
 
 ### Pending Release
 
+### v2.15.0
+
+- :tada: Add CloudFormation Service Role export for delegated stack deployments
+
 ### v2.14.0
 
 - :tada: Add COTURN ECR Repository
