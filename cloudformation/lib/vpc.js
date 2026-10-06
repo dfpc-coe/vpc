@@ -89,7 +89,11 @@ export default {
             Type: 'AWS::EC2::VPCEndpoint',
             Properties: {
                 VpcEndpointType: 'Gateway',
-                RouteTableIds: [cf.ref('PublicRouteTable')],
+                RouteTableIds: [
+                    cf.ref('PublicRouteTable'),
+                    cf.ref('PrivateRouteTableA'),
+                    cf.ref('PrivateRouteTableB')
+                ],
                 ServiceName: cf.join(['com.amazonaws.', cf.region, '.s3']),
                 VpcId: cf.ref('VPC')
             }
@@ -336,6 +340,20 @@ export default {
                 Name: cf.join([cf.stackName, '-subnet-private-b'])
             },
             Value: cf.ref('SubnetPrivateB')
+        },
+        NatPublicIPA: {
+            Description: 'Static egress IP for Subnet Private A',
+            Export: {
+                Name: cf.join([cf.stackName, '-nat-ip-a'])
+            },
+            Value: cf.ref('NatPublicIPA')
+        },
+        NatPublicIPB: {
+            Description: 'Static egress IP for Subnet Private B',
+            Export: {
+                Name: cf.join([cf.stackName, '-nat-ip-b'])
+            },
+            Value: cf.ref('NatPublicIPB')
         }
     }
 };

@@ -12,6 +12,11 @@
 
 ### Pending Release
 
+### v2.16.0
+
+- :tada: Export NAT Gateway Elastic IPs as `-nat-ip-a` and `-nat-ip-b` for static egress allowlisting
+- :rocket: Route private subnet S3 traffic through the S3 Gateway Endpoint instead of the NAT Gateways
+
 ### v2.15.0
 
 - :tada: Add CloudFormation Service Role export for delegated stack deployments
