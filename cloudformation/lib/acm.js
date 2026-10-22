@@ -7,14 +7,12 @@ export default {
             Properties: {
                 DomainName: cf.join(['*.', cf.ref('HostedZoneName')]),
                 SubjectAlternativeNames: [
+                    cf.ref('HostedZoneName'),
                     cf.join(['*.map.', cf.ref('HostedZoneName')])
                 ],
                 ValidationMethod: 'DNS',
                 DomainValidationOptions: [{
                     DomainName: cf.ref('HostedZoneName'),
-                    HostedZoneId: cf.ref('HostedZoneID')
-                },{
-                    DomainName: cf.join(['*.', cf.ref('HostedZoneName')]),
                     HostedZoneId: cf.ref('HostedZoneID')
                 }, {
                     DomainName: cf.join(['*.map.', cf.ref('HostedZoneName')]),

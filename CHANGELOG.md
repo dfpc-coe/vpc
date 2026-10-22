@@ -12,6 +12,8 @@
 
 ### Pending Release
 
+- :rocket: Add the apex hosted zone name as a SAN on the shared ACM certificate so stacks serving the root domain can import it
+
 ### v2.16.0
 
 - :tada: Export NAT Gateway Elastic IPs as `-nat-ip-a` and `-nat-ip-b` for static egress allowlisting
