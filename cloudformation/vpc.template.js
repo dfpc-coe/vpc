@@ -8,6 +8,7 @@ import ELBLogs from './lib/elb-logs.js';
 import ECSCluster from './lib/ecs-cluster.js';
 import ACM from './lib/acm.js';
 import CloudFormation from './lib/cloudformation.js';
+import Batch from './lib/batch.js';
 
 export default cf.merge({
     Description: 'Template for @tak-ps/vpc',
@@ -71,4 +72,4 @@ export default cf.merge({
             Value: cf.ref('HostedZoneID')
         }
     }
-}, VPC, KMS, Connect, ELBLogs, ECSCluster, ECR, ECRLambda, ACM, CloudFormation);
+}, VPC, KMS, Connect, ELBLogs, ECSCluster, ECR, ECRLambda, ACM, CloudFormation, Batch);
