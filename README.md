@@ -41,6 +41,15 @@ Deployment can then be performed via the following:
 npx deploy create <stack>
 ```
 
+> [!NOTE]
+> The Batch Compute Environment uses the Batch Service Linked Role, which Batch creates on first use.
+> The deploying principal therefore needs `iam:CreateServiceLinkedRole` the first time the stack is
+> deployed with it; to create the role ahead of time instead, run:
+>
+> ```
+> aws iam create-service-linked-role --aws-service-name batch.amazonaws.com
+> ```
+
 > ![NOTE]
 > This template assumes the presense of the ECS Linked Role. If the role is not present in your account
 > the stack deployment will fail. To create the role, run the following AWS CLI command:
