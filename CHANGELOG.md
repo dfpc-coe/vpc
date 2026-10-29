@@ -12,6 +12,8 @@
 
 ### Pending Release
 
+### v2.17.0
+
 - :rocket: Add the apex hosted zone name as a SAN on the shared ACM certificate so stacks serving the root domain can import it
 - :tada: Add a shared Fargate Batch Compute Environment and its Security Group, exported as `-batch-compute-environment` and `-batch-sg` for consumer stacks' job queues
 
