@@ -7,7 +7,8 @@ const repositoryNames = [
     'cloudtak-api',
     'cloudtak-dji',
     'cloudtak-geofence',
-    'cloudtak-media'
+    'cloudtak-media',
+    'frontend'
 ].map((suffix) => {
     return cf.join([cf.stackName, '-', suffix]);
 });

@@ -12,9 +12,14 @@
 
 ### Pending Release
 
+### v2.18.0
+
+- :tada: Add a `-frontend` ECR Repository for the COTAK frontend image, covered by the active tagger
+- :tada: Add an `ACMRoot` certificate covering the apex hosted zone name, exported as `-acm-root`
+- :bug: Restore the original `-acm` certificate, which could not be replaced while imported, and mark it deprecated
+
 ### v2.17.0
 
-- :rocket: Add the apex hosted zone name as a SAN on the shared ACM certificate so stacks serving the root domain can import it
 - :tada: Add a shared Fargate Batch Compute Environment and its Security Group, exported as `-batch-compute-environment` and `-batch-sg` for consumer stacks' job queues
 
 ### v2.16.0

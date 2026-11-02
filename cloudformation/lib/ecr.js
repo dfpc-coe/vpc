@@ -195,6 +195,28 @@ export default {
                 }
             }
         },
+        RepositoryFrontend: {
+            Type: 'AWS::ECR::Repository',
+            Properties: {
+                RepositoryName: cf.join([cf.stackName, '-frontend']),
+                LifecyclePolicy: {
+                    LifecyclePolicyText: lifecyclePolicyText
+                },
+                RepositoryPolicyText: {
+                    Version: '2012-10-17',
+                    Statement: [{
+                        Effect: 'Allow',
+                        Principal: {
+                            AWS: cf.join(['arn:', cf.partition, ':iam::', cf.accountId, ':root'])
+                        },
+                        Action: [
+                            'ecr:BatchGetImage',
+                            'ecr:GetDownloadUrlForLayer'
+                        ]
+                    }]
+                }
+            }
+        },
         RepositoryTAKServer: {
             Type: 'AWS::ECR::Repository',
             Properties: {
